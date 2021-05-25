@@ -28,7 +28,8 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
+        db.execSQL("DROP TABLE IF EXISTS " + NAMES_Table);
+        onCreate(db);
     }
 
     public boolean add(Model model){
@@ -37,6 +38,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
         cv.put(USER_name,model.getTitle());
         long insert = sqLiteDatabase.insert(NAMES_Table, null, cv);
+        sqLiteDatabase.close();
         if (insert==-1)return false;
         else return true;
     }
@@ -48,10 +50,7 @@ public class DBHelper extends SQLiteOpenHelper {
         Cursor cursor=sqLiteDatabase.rawQuery(display,null);
         if(cursor.moveToFirst()){
             do {
-                String nametext=cursor.getString(1);
-                Model model=new Model(nametext,true);
-                models.add(model);
-
+                models.add(new Model(cursor.getString(1),true));
             }while (cursor.moveToNext());
         }
         cursor.close();
@@ -61,10 +60,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public void delete(Model model){
         SQLiteDatabase sqLiteDatabase=this.getWritableDatabase();
-        String deletes="DELETE FROM "+NAMES_Table+" WHERE "+USER_name+" = "+model.getTitle();
-        //Cursor cursor = sqLiteDatabase.rawQuery(deletes, null);
-        //if (cursor.moveToFirst()) {}
-        sqLiteDatabase.execSQL(deletes);
+        sqLiteDatabase.delete(NAMES_Table,"Name=?", new String[]{model.getTitle()});
         sqLiteDatabase.close();
     }
 }
