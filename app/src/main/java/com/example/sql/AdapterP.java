@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 
@@ -41,8 +42,11 @@ public class AdapterP extends RecyclerView.Adapter<AdapterP.viewHolder>{
     public void onBindViewHolder(@NonNull viewHolder holder, final int position) {
         final Model model=modelArrayList.get(position);
         holder.text.setText(model.getTitle());
+        holder.desc.setText(model.getDesc());
+        holder.date.setText(model.getDate());
+        holder.time.setText(model.getTime());
 
-        holder.text.setOnClickListener(new View.OnClickListener() {
+        holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (mlistener!=null){
@@ -74,12 +78,17 @@ public class AdapterP extends RecyclerView.Adapter<AdapterP.viewHolder>{
     }
 
     public class viewHolder extends RecyclerView.ViewHolder {
-        TextView text;
+        TextView text,desc,date,time;
         ImageView delete;
+        CardView cardView;
         public viewHolder(@NonNull View itemView, final OnItemClickListener listener) {
             super(itemView);
             text=itemView.findViewById(R.id.text);
             delete=itemView.findViewById(R.id.delete);
+            cardView=itemView.findViewById(R.id.card);
+            desc=itemView.findViewById(R.id.desc);
+            date=itemView.findViewById(R.id.date);
+            time=itemView.findViewById(R.id.time);
         }
     }
 }
